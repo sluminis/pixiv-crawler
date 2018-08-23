@@ -2,6 +2,7 @@ import requests
 import re
 import demjson
 from work import Work, Illustration, Animation
+from exceptions import NetworkError
 from user import User
 
 
@@ -14,11 +15,7 @@ class WorkFactory:
 
     def get_work(self, wid):
         print('crawling work %d' % wid)
-        try:
-            html = self.P.get(url=self.url + str(wid))
-        except requests.exceptions.ProxyError:
-            print('Bad Proxy(work ID: %d)' % wid)
-            return Work(wid)
+        html = self.P.get(url=self.url + str(wid))
 
         djson = re.search(r'}\)\((.*?)\);</script>', html.text).group(1)
         #print('djson:',djson)

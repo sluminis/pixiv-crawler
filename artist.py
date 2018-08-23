@@ -47,7 +47,7 @@ class Artist:
             self.content[type].extend(self.crawlWorks(selector))
 
     def crawl(self):
-        print('Getting WorksList(%d): ' % self.uid, end="")
+        print('Getting WorksList(%d): ' % int(self.uid), end="")
         crawl_types = ['illust', 'manga', 'ugoira']
         for ctype in crawl_types:
             self.crawlWorksList(ctype)

@@ -1,8 +1,8 @@
-# Sentinel used for shutdown
-class ActorExit(Exception):
+class SpiderError(Exception):
     pass
 
-class SpiderError(Exception):
+# Sentinel used for shutdown
+class ActorExit(SpiderError):
     pass
 
 class NetworkError(SpiderError):

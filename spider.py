@@ -52,9 +52,11 @@ class Spider:
     @testtools.timethis
     def run(self):
         self.start()
-        self.crawlArtist(12949983)
+        #self.crawlArtist(12949983)
+        self.crawlFollow()
         self.close()
 
+    #TODO: 下载进度
 
 if __name__ == '__main__':
     import json
@@ -62,5 +64,8 @@ if __name__ == '__main__':
         cfg = json.load(file)
 
     sp = Spider(cfg['account'], cfg['password'])
-    sp.setPath('C:/Users/JX/Desktop/Pixiv/tsst')
+    sp.setPath('E:/pixiv')
     sp.run()
+    '''
+    22003.354938222223s
+    '''

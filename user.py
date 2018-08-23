@@ -1,7 +1,25 @@
 import requests
 import re
 from bs4 import BeautifulSoup
+import time
+from exceptions import SpiderError
 
+class NoProxyErrorSession(requests.Session):
+
+    def get(self, url, **kwargs):
+        fail = 0
+        while True:
+            try:
+                P = super().get(url, **kwargs)
+            except requests.exceptions.ProxyError:
+                print("ProxyError occur")
+                fail += 1
+                if fail >= 10:
+                    raise SpiderError("bad network occurs too many times")
+                time.sleep(0.1)
+                continue
+            break
+        return P
 
 class User:
 
@@ -41,7 +59,7 @@ class User:
 
     @classmethod
     def getRequest(cls):
-        P = requests.Session()
+        P = NoProxyErrorSession()
         P.headers = cls.header
         P.proxies = cls.proxies
         return P
@@ -87,7 +105,11 @@ class User:
         data = []
         for detail in userdata:
             a = detail.find('a')
-            d = {'uid':a.attrs['data-user_id'], 'profile_img':a.attrs['data-profile_img'], 'user_name':a.attrs['data-user_name']}
+            d = {
+                'uid': a.attrs['data-user_id'],
+                'profile_img': a.attrs['data-profile_img'],
+                'user_name': a.attrs['data-user_name']
+            }
             data.append(d)
         return data
 

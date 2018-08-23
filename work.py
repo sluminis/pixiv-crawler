@@ -52,9 +52,9 @@ class Illustration(Work):
         for tag in tag_dir:
             tags.append(tag['tag'])
         self.content['tags'] = tags
-        self.content['images'] = self.extractImage(work_dir)
+        self.content['images'] = self._extractImage(work_dir)
 
-    def extractImage(self, work_dir):
+    def _extractImage(self, work_dir):
         images = {}
         img_dir = work_dir['urls']
         images['regular'] = img_dir['regular']
@@ -74,8 +74,8 @@ class Illustration(Work):
         images['original'] = oimgs
         return images
 
-    def record(self, shelve):
-        shelve[str(self.wid)] = self
+    def record(self, db):
+        db[str(self.wid)] = self
 
     def download(self, P, path):
         print('downloading work %d' % self.wid)
@@ -105,11 +105,9 @@ class Illustration(Work):
         self.content['files'] = files
 
     def _part_download(self, P, url, filename):
-        try:
-            picture = P.get(url)
-        except requests.exceptions.ProxyError:
-            print("download bad Proxy(url=%s)" % url)
-            return
+
+        picture = P.get(url)
+
         with open(filename, 'wb') as file:
             file.write(picture.content)
 
@@ -118,7 +116,7 @@ class Animation(Illustration):
 
     zip_pattern = re.compile(u'(https?://.*?/).*(/img[\d/]+_ugoira)')
 
-    def extractImage(self, work_dir):
+    def _extractImage(self, work_dir):
         images = {}
         img_dir = work_dir['urls']
         images['regular'] = img_dir['regular']

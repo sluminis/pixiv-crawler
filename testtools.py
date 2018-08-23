@@ -1,6 +1,9 @@
 import time
 from functools import wraps
-
+import shelve
+import workfactory
+import work
+import user
 
 def timethis(func):
     @wraps(func)
@@ -12,3 +15,16 @@ def timethis(func):
         return r
 
     return wrapper
+
+if __name__ == '__main__':
+    s = shelve.open('E:/pixiv/pixivDB')
+
+    ck = 0
+    for k in s.keys():
+        try:
+            s[k]
+        except Exception:
+            print(k)
+            ck += 1
+
+    print('ck:',ck)
